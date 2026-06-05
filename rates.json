@@ -1,13 +1,13 @@
 {
-    "sypPerUsd": 13850,
+    "sypPerUsd": 13900,
     "usdPer": {
-        "EUR": 1.160629,
+        "EUR": 1.162076,
         "SAR": 0.266667,
         "AED": 0.272294,
         "QAR": 0.274725,
-        "TRY": 0.021744,
+        "TRY": 0.021723,
         "JOD": 1.410437
     },
-    "updatedAt": "2026-06-04T08:57:24Z",
+    "updatedAt": "2026-06-05T08:04:55Z",
     "source": "manual+forex"
 }
