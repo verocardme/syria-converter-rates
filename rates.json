@@ -1,5 +1,5 @@
 {
-    "sypPerUsd": 13450,
+    "sypPerUsd": 13100,
     "usdPer": {
         "EUR": 1.135325,
         "SAR": 0.266667,
@@ -8,6 +8,6 @@
         "TRY": 0.021498,
         "JOD": 1.410437
     },
-    "updatedAt": "2026-06-25T07:23:14Z",
+    "updatedAt": "2026-06-25T11:35:41Z",
     "source": "manual+forex"
 }
