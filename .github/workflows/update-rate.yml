@@ -1,0 +1,47 @@
+name: Update SYP/USD Rate
+
+on:
+  schedule:
+    # ~3x/day. Times are UTC. Adjust to your preferred local times if needed.
+    - cron: '0 6 * * *'   # 06:00 UTC
+    - cron: '0 12 * * *'  # 12:00 UTC
+    - cron: '0 18 * * *'  # 18:00 UTC
+  workflow_dispatch:        # allow manual runs from the Actions tab
+
+permissions:
+  contents: write           # needed to push the auto-update commit
+
+jobs:
+  update-rate:
+    runs-on: ubuntu-latest
+    # Pause automation from the GitHub UI (Settings > Variables) without editing
+    # files: set the repo variable AUTO_UPDATE_ENABLED to exactly "false".
+    # When unset or any other value, the job runs normally.
+    if: ${{ vars.AUTO_UPDATE_ENABLED != 'false' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # If this step exits non-zero (e.g. validation failed), the job fails here
+      # and the commit step below never runs — so nothing is committed.
+      - name: Run rate updater
+        env:
+          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+        run: node scripts/update-rate.js
+
+      - name: Commit and push if rates.json changed
+        run: |
+          if git diff --quiet -- rates.json; then
+            echo "rates.json unchanged — nothing to commit."
+          else
+            git config user.name "SPToday Rate Bot"
+            git config user.email "actions@github.com"
+            git add rates.json
+            git commit -m "chore: auto-update SYP/USD rate via sp-today"
+            git push
+          fi
