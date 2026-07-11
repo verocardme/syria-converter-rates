@@ -2,10 +2,10 @@ name: Update SYP/USD Rate
 
 on:
   schedule:
-    # ~3x/day. Times are UTC. Adjust to your preferred local times if needed.
-    - cron: '0 6 * * *'   # 06:00 UTC
-    - cron: '0 12 * * *'  # 12:00 UTC
-    - cron: '0 18 * * *'  # 18:00 UTC
+    # 3x/day. Times are UTC; comments show KSA local time (UTC+3).
+    - cron: '0 6 * * *'   # 06:00 UTC = 9 AM KSA
+    - cron: '0 9 * * *'   # 09:00 UTC = 12 PM KSA
+    - cron: '0 13 * * *'  # 13:00 UTC = 4 PM KSA
   workflow_dispatch:        # allow manual runs from the Actions tab
 
 permissions:

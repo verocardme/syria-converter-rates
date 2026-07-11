@@ -141,12 +141,17 @@ async function main() {
     );
   }
 
-  if (newRate === currentRate) {
-    console.log('✅ Scraped rate equals current rate; no change needed. rates.json left as-is.');
-    return;
+  const rateChanged = newRate !== currentRate;
+  if (rateChanged) {
+    console.log(`Rate changed: ${currentRate} -> ${newRate}`);
+  } else {
+    console.log(`Rate unchanged at ${currentRate}, refreshing timestamp only`);
   }
 
   // --- Write back, preserving indentation and trailing newline ---------------
+  // Always refresh updatedAt on a successful scrape+validation — even when the
+  // rate is identical — so the app's "last updated" reflects that the rate was
+  // re-verified as current. This means a successful run always changes the file.
   const indent = detectIndent(raw);
   const hadTrailingNewline = raw.endsWith('\n');
 
@@ -159,8 +164,9 @@ async function main() {
   fs.writeFileSync(RATES_PATH, output, 'utf8');
 
   console.log(
-    `✅ Updated sypPerUsd: ${currentRate} -> ${newRate} ` +
-      `(${(deviation * 100).toFixed(1)}% change). source="firecrawl-auto", updatedAt=${rates.updatedAt}`
+    `✅ Wrote rates.json: sypPerUsd=${newRate} ` +
+      `(${(deviation * 100).toFixed(1)}% ${rateChanged ? 'change' : 'diff'}). ` +
+      `source="firecrawl-auto", updatedAt=${rates.updatedAt}`
   );
 }
 
