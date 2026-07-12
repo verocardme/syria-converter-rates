@@ -39,6 +39,11 @@ function detectIndent(raw) {
 async function scrapeRate(apiKey) {
   const body = {
     url: SOURCE_URL,
+    // Firecrawl v2 defaults maxAge to 172800000 ms (2 days), which silently
+    // served cached snapshots instead of fresh scrapes. maxAge: 0 forces a
+    // fresh fetch every run. Cost is unchanged — cached and fresh scrapes both
+    // cost 5 credits in JSON mode.
+    maxAge: 0,
     formats: [
       {
         type: 'json',
@@ -91,6 +96,12 @@ async function scrapeRate(apiKey) {
   if (!extracted || typeof extracted !== 'object') {
     fail(`Firecrawl response did not contain extracted JSON: ${JSON.stringify(payload)}`);
   }
+
+  // Diagnostics (logged after parsing, before the 20% validation guard):
+  // cache_state should read "miss" now that maxAge: 0 forces fresh fetches; a
+  // "hit" would mean the maxAge parameter is being ignored again.
+  console.log(`Firecrawl cache_state: ${payload?.data?.metadata?.cache_state}`);
+  console.log(`Firecrawl returned usd_buy_syp: ${extracted.usd_buy_syp}`);
 
   return extracted;
 }
