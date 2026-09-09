@@ -1,5 +1,5 @@
 {
-    "sypPerUsd": 13175,
+    "sypPerUsd": 13135,
     "usdPer": {
         "EUR": 1.144843,
         "SAR": 0.266667,
@@ -8,6 +8,6 @@
         "TRY": 0.021232,
         "JOD": 1.410437
     },
-    "updatedAt": "2026-09-09T10:07:51.756Z",
+    "updatedAt": "2026-09-09T13:10:33.131Z",
     "source": "firecrawl-auto"
 }
